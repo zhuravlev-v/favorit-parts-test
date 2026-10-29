@@ -4,8 +4,7 @@ import {
   isPlainObject,
 } from '@/api/partsValidation.js'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-const API_KEY = import.meta.env.VITE_API_KEY
+const API_BASE_URL = '/api/parts'
 
 const API_ERROR_MESSAGES = {
   'Empty key!': 'Не указан ключ доступа к API.',
@@ -25,23 +24,8 @@ const getApiErrorMessage = (error) => {
 }
 
 const buildUrl = (params) => {
-  if (!API_BASE_URL) {
-    throw new Error('Не задан VITE_API_BASE_URL.')
-  }
-
-  if (!API_KEY) {
-    throw new Error('Не задан VITE_API_KEY.')
-  }
-
-  let url
-
-  try {
-    url = new URL(API_BASE_URL)
-  } catch {
-    throw new Error('VITE_API_BASE_URL содержит некорректный URL.')
-  }
-
-  url.search = new URLSearchParams({ key: API_KEY, ...params })
+  const url = new URL(API_BASE_URL, window.location.origin)
+  url.search = new URLSearchParams(params)
 
   return url
 }
